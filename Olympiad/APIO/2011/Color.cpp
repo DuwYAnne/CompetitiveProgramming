@@ -1,3 +1,11 @@
+/*
+Idea is to fix the first row and first column, from which everything else will be determined.
+Add the contribution from point (0, 0) being 1 or 0
+each connected component which doesnt have a predetermined color multiplies the answer by 2
+*/
+
+
+
 #include <bits/stdc++.h>
 #define owo(i,a, b) for(int i=(a);i<(b); ++i)
 #define uwu(i,a, b) for(int i=(a)-1; i>=(b); --i)
