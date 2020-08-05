@@ -1,7 +1,6 @@
-//--------------------------------------------------------------------NOT SUBMITTED-------------------------------------------------------------------
-#pragma GCC target ("avx2")
+/*#pragma GCC target ("avx2")
 #pragma GCC optimization ("O3")
-#pragma GCC optimization ("unroll-loops")
+#pragma GCC optimization ("unroll-loops")*/
 #include <bits/stdc++.h>
 #define owo(i,a, b) for(int i=(a);i<(b); ++i)
 #define uwu(i,a, b) for(int i=(a)-1; i>=(b); --i)
@@ -27,14 +26,11 @@ const int NINF = 0xc0c0c0c0;
 const ll INFLL = 0x3f3f3f3f3f3f3f3f;
 const ll NINFLL = 0xc0c0c0c0c0c0c0c0;
 const int mxN = 101;
-int arr[mxN];
-int farr[mxN];
-ttgl srt[mxN];
+ll arr[mxN];
 ttgl ans[mxN];
-int num[mxN];
-int gt[mxN];
-int v, nn, n, m;
-int req;
+ll num[mxN];
+ll v, req;
+int n, m;
 void computemax(int idx) {
     memset(num, 0, sizeof(num));
     arr[idx]+=req;
@@ -43,9 +39,9 @@ void computemax(int idx) {
         return;
     }
     owo(bb, 0, m) {
-        array<int, 3> best = {0, 1, 0};
-        owo(i, 0, nn) {
-            if(arr[i]*20<v)return;
+        array<ll, 3> best = {0, 1, 0};
+        owo(i, 0, n) {
+            if(arr[i]*20<v)continue;
             if(best[1]*arr[i]>best[0]*(num[i]+1)) {
                 best = {arr[i], num[i]+1, i};
             }
@@ -60,78 +56,74 @@ void computemin(int idx) {
     //lets compute dp[i][j] = min assigned to have i win j seats :
     // transition is dp[i][j] = min(k<j dp[i-1][k] + cost to win j-k seats)
     //kinda weird because fractions :/
-    if(farr[idx]*20<v)return;
-    int dp[mxN][2*mxN];
+    if(arr[idx]*20<v)return;
+    ll dp[mxN][2*mxN];
     int l = 0;
     int r = m;
     while(l<r) {
         int mid = (l+r)/2;
         memset(dp, INF, sizeof(dp));
         dp[0][0] = 0;
-        ttgl smal = {farr[idx], mid+1};
+        pair<ll, ll> smal = {arr[idx], mid+1};
         owo(i, 1, n+1) {
             if(i==idx+1) {
-                owo(j, 0, m+1) {
+                owo(j, 0, m-mid+1) {
                     dp[i][j] = dp[i-1][j];
                 }
                 continue;
             }
-            owo(j, 0, m+1) {
-                owo(k, 0, j+1) {
-                    int cost = 0;
-                    int w = j-k;
-                    if(gt[i-1]<gt[idx]) {
-                        if((w*smal.first)%smal.second==0) {
-                            cost = (w*smal.first)/smal.second;
-                        }else {
-                            cost = (w*smal.first)/smal.second+1;
-                        }
-                    }else {
-                        cost = (w*smal.first)/smal.second+1;
+            owo(k, 0, m+1) {
+                dp[i][k] = dp[i-1][k];
+            }
+            owo(j, 0, m-mid) {
+                for(ll w = 1; w<=m-mid-j; ++w) {
+                    ll cost = 0;
+                    cost = (w*smal.first+smal.second-1)/smal.second;
+                    if(cost*smal.second==smal.first*w&&idx<=i-1)cost++;
+                    cost = max(cost, arr[i-1]);
+                    if((cost)*20<v) {
+                        cost = (v+19)/20;
                     }
-                    cost = max(0, cost-farr[i-1]);
-                    dp[i][j] = min(dp[i][j], dp[i-1][k] + cost);
+                    //cout<<cost<<"\n";
+                    dp[i][j+w] = min(dp[i][j+w], dp[i-1][j] + cost-arr[i-1]);
                 }
+                /*if(gt[idx]==0) {
+                    cout<<gt[idx]<<" "<<mid<<" "<<i<<" "<<j<<" "<<dp[i][j]<<"\n";
+                }*/
             }
         }
         //cout<<gt[idx]<<" "<<mid<<" "<<dp[n][m-mid]<<"\n";
         if(dp[n][m-mid]<=req)r = mid;
         else l = mid+1;
     }
-    ans[gt[idx]].second = l;
+    ans[idx].second = l;
 }
 int main() {
     //freopen("file.in", "r", stdin);
     //freopen("file.out", "w", stdout);
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
     cin.tie(0)->sync_with_stdio(0);
-    cin>>v>>nn>>m;
+    cin>>v>>n>>m;
     req = v;
-    owo(i, 0, nn) {
+    owo(i, 0, n) {
         cin>>arr[i];
         req-=arr[i];
-        srt[i] = {arr[i], i};
-    }
-    sort(srt, srt+nn);
-    reverse(srt, srt+nn);
-    owo(i, 0, min(20, nn)){
-        gt[n] = srt[i].second;
-        farr[n++] = srt[i].first;
     }
     //simulate max :/
-    owo(i, 0, nn) {
+    owo(i, 0, n) {
         computemax(i);
     }
     //binary search on min
     owo(i, 0, n) {
         computemin(i);
     }
-    owo(i, 0, nn) {
+    owo(i, 0, n) {
         cout<<ans[i].first<<" ";
     }
     cout<<"\n";
-    owo(i, 0, nn) {
+    owo(i, 0, n) {
         cout<<ans[i].second<<" ";
     }
+    cout<<"\n";
     return 0;
 }
