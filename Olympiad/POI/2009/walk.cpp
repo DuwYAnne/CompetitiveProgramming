@@ -54,7 +54,7 @@ int main() {
     }
     owo(i, 0, n) {
         dist[i][i] = 0;
-        Q.push({i, i, 0, 0});
+        Q.push({i, i, -1, -1});
         prv[i][i] = {-1, -1, -1};
     }
     owo(i, 0, n) {
@@ -64,7 +64,7 @@ int main() {
                     dist[i][v] = 1;
                     prv[i][v] = {j, -1, -1};
                     //cout<<i<<" "<<v<<"\n";
-                    Q.push({i, v, 0, 0});
+                    Q.push({i, v, -1, -1});
                 }
             }
         }
@@ -72,22 +72,21 @@ int main() {
     while(!Q.empty()) {
         auto p = Q.front();
         Q.pop();
-        if(p[3]==0) {
+        if(p[3]==-1) {
             owo(ch, 0, 26) {
                 for(int u: radj[p[0]][ch]) {
                     if(flag[p[1]][u][ch])continue;
                     flag[p[1]][u][ch] = true;
-                    //cout<<p[0]<<" "<<p[1]<<" "<<u<<" "<<(ch+1)<<"\n";
-                    Q.push({p[0], p[1], u, ch+1});
+                    Q.push({p[0], p[1], u, ch});
                 }
             }
         }else {
                 //cout<<p[1]<<" "<<alph[p[3]-1]<<"\n";
-            for(auto v: adj[p[1]][p[3]-1]) {
+            for(auto v: adj[p[1]][p[3]]) {
                 if(dist[p[2]][v]!=INF)continue;
                 dist[p[2]][v] = dist[p[0]][p[1]]+2;
-                prv[p[2]][v] = {p[3]-1, p[0], p[1]};
-                Q.push({p[2], v, 0, 0});
+                prv[p[2]][v] = {p[3], p[0], p[1]};
+                Q.push({p[2], v, -1, -1});
             }
         }
     }
