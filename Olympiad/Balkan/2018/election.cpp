@@ -1,3 +1,9 @@
+//proof that the following solution works:
+//Its easy to see that maintaining the prefix as we iterate over rights bounds will give us the number of prefix T's we must remove before cap can win
+//so then we must consider the suffix and the overlap that happens between removing suffix and prefix T's. Since when encountering a C, we remove the farthest
+//prefix T, we are greedily considering the overlap to be as large as possible, which works because you will still be able to remove the same number of prefix
+//T's even if u remove earlier, and the overlap will never skip a T so will be included as a suffix of the prefix.
+
 //#pragma GCC target ("avx2")
 //#pragma GCC optimization ("O3")
 //#pragma GCC optimization ("unroll-loops")
