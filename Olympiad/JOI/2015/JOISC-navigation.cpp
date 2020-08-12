@@ -1,4 +1,4 @@
-//for(int v: adj[u]) goto v if (0->1, 1->2)
+//submitted on atcoder
 #include <bits/stdc++.h>
 #include "navigation_lib.h"
 using namespace std;
