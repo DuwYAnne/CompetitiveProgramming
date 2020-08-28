@@ -39,17 +39,13 @@ int ed[mxN];
 int n;
 void dfs(int u, int tp) {
     int num = 0;
-    if(u!=tp) {
-      chil[tp].senpai(u);
-    }
+    int curr = chil[tp].size();
     for(int v: G[u]) {
-      if(ans[v])continue;
-      num++;
-    }
-    if(num>1)ed[tp] = min(ed[tp], (int)chil[tp].size());
-    for(int v: G[u]) {
-      if(ans[v])continue;
-      dfs(v, tp);
+        if(ans[v]) continue;
+        num++;
+        if(num>1) ed[tp] = min(ed[tp], curr);
+        chil[tp].senpai(v);
+        dfs(v, tp);
     }
 }
 int main() {
