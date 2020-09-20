@@ -1,8 +1,8 @@
 #include "towns.h"
 #include <bits/stdc++.h>
-
+         
 using namespace std;
-
+         
 const int mxN = 111;
 int arr[mxN];
 int dist[mxN][mxN];
@@ -16,7 +16,7 @@ int getdist(int a, int b) {
         return dist[a][b] = dist[b][a] = getDistance(a, b);
     }
     return dist[a][b];
-}    
+}
 bool solve(int hub) {
     vector<int> stk;
     vector<int> bkt;
@@ -37,7 +37,7 @@ bool solve(int hub) {
         }else {
             stk.push_back(i);
             if(bkt.size()) {
-                stk.push_back(bkt.back());
+                 stk.push_back(bkt.back());
                 bkt.pop_back();
             }
         }
@@ -61,4 +61,45 @@ bool solve(int hub) {
     }
     if(bkt.size())return false;
     return true;
+}
+int hubDistance(int N, int sub) {
+    n = N;
+    memset(dist, -1, sizeof(dist));
+    for(int i = 1, mxdist = 0; i < n; ++i) {
+        if(getdist(0, i) > mxdist) {
+            mxdist = getdist(0, i);
+            s = i;
+        }
+    }
+    for(int i = 0, mxdist = 0; i < n; ++i) {
+        if(i^s) {
+            if(getdist(s, i) > mxdist) {
+                mxdist = getdist(s, i);
+                t = i;
+            }
+        }
+    }
+    int hub[2];
+    int hubcnt = 0;
+    int R = 0x3f3f3f3f;
+    for(int i = 0; i < n; ++i) {
+        lcadist[i] = (getdist(s, i) + getdist(s, 0) - getdist(i, 0)) / 2;
+        if(max(lcadist[i], getdist(s, t) - lcadist[i]) < R) {
+            R = max(lcadist[i], getdist(s, t) - lcadist[i]);
+            hubcnt = 1;
+            hub[0] = i;
+        }else if(max(lcadist[i], getdist(s, t) - lcadist[i]) == R && lcadist[i]^lcadist[hub[0]]){
+            hubcnt = 2;
+            hub[1] = i;
+        }
+    }
+    //cout<<hubcnt<<"\n";
+    if(sub <= 2) {
+        return R;
+    }
+    bool balanced = false;
+    for(int i = 0; i < hubcnt; ++i) {
+        balanced |= solve(hub[i]);
+    }
+    return (balanced ? 1 : -1) * R;
 }
