@@ -20,10 +20,11 @@ void upd(int num, int pos, int del) {
         pos += pos&-pos;
     }
 }
-int sum(int num, int pos, int del) {
+int sum(int num, int pos) {
+    int res = 0;
     pos++;
     while(pos) {
-        BIT[num][pos]+=del;
+        res+=BIT[num][pos];
         pos -= pos&-pos;
     }
 }
@@ -87,7 +88,7 @@ ll count_rectangles(vector<vector<int>> A) {
         }
     }
     ll res = 0;
-    for(int i = 1; j < m-1; ++i) {
+    for(int i = 1; i < m-1; ++i) {
         for(int j = i; j < m-1; ++j) {
             ch[j].clear();
         }
