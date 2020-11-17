@@ -1,3 +1,7 @@
+/* Solve on each bit. Iterate through nodes largest to smallest, maintain dsu and add contribution to answer with some powers of 2*/
+
+
+
 #pragma GCC target ("avx2")
 #pragma GCC optimization ("O3")
 #pragma GCC optimization ("unroll-loops")
