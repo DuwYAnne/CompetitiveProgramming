@@ -1,3 +1,9 @@
+/*
+Consider some position i, how can we find the answer? For each number arr[x], we call it active if 
+(x > i && arr[x] <= min_{i<j<x} arr[j]) || (x < i && arr[x] <= min_{x<j<i} arr[j]). Then the ans is
+prod_{0<=j<=mxN} nCr(numactive[j], num active to the left of x[j]).
+Easily maintain this as you iterate through the array. 
+*/
 #pragma GCC target ("avx2")
 #pragma GCC optimization ("O3")
 #pragma GCC optimization ("unroll-loops")
